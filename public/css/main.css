@@ -1,0 +1,29 @@
+html {
+  position: relative;
+  min-height: 100%
+}
+body {
+  margin: 0 0 25px;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0 10px;
+}
+img {
+	max-height: 190px;
+	width: 250px;
+}
+.row.campgrounds {
+	display: flex;
+	flex-wrap: wrap;
+}
+.row.new>h1 {
+	text-align: center;
+}
+.row>.form {
+	width: 30%;
+	margin: 25px auto;
+}
+
