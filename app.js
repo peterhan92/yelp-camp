@@ -10,6 +10,7 @@ const express = require("express"),
 	User = require("./models/user"),
 	seedDB = require("./seeds")
 
+mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost/yelp_camp");
 seedDB();
 
@@ -30,6 +31,10 @@ app
 	.use(bodyParser.urlencoded({extended: true}))
 	.set("view engine", "ejs")
 	.use(express.static(staticAssets))
+	.use(function(req, res, next) {
+		res.locals.currentUser = req.user;
+		next();
+	})
 	// ROUTES
 	.get("/", function(req, res) {
 		res.render("home");
@@ -40,7 +45,7 @@ app
 			if (err) {
 				console.log(err);
 			} else {
-				res.render("campgrounds/index", {campgrounds: allCampgrounds});
+				res.render("campgrounds/index", {campgrounds: allCampgrounds, currentUser: req.user});
 			}
 		})
 	})
@@ -78,7 +83,7 @@ app
 	// ===================
 	// COMMENTS ROUTES
 	// ===================
-	.get("/campgrounds/:id/comments/new", function(req, res) {
+	.get("/campgrounds/:id/comments/new", isLoggedIn, function(req, res) {
 		Campground.findById(req.params.id, function(err, campground) {
 			if (err) {
 				console.log(err);
@@ -87,7 +92,7 @@ app
 			}
 		})
 	})
-	.post("/campgrounds/:id/comments", function(req, res) {
+	.post("/campgrounds/:id/comments", isLoggedIn, function(req, res) {
 		// look up campground using id
 		Campground.findById(req.params.id, function(err, campground) {
 			if (err) {
@@ -123,7 +128,28 @@ app
 			})
 		})
 	})
+	// show login form
+	.get("/login", function(req, res) {
+		res.render("login");
+	})
+	// handling login logic
+	.post("/login", passport.authenticate("local", {
+		successRedirect: "/campgrounds", 
+		failureRedirect: "/login"
+	}) ,function(req, res) {
+	})
+	// logout
+	.get("/logout", function(req, res) {
+		req.logout();
+		res.redirect("/campgrounds");
+	})
 	.listen(3000, function() {
 		console.log("Listening on port 3000");
 	})
-	
+
+function isLoggedIn(req, res, next) {
+	if (req.isAuthenticated()) {
+		return next();
+	}
+	res.redirect("/login");
+} 
