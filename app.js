@@ -1,14 +1,18 @@
 const express = require("express"),
-	app = express(),
-	bodyParser = require("body-parser"),
-	mongoose = require("mongoose"),
-	passport = require("passport"),
-	LocalStrategy = require("passport-local"),
-	staticAssets = __dirname + "/public",
-	Campground = require("./models/campground"),
-	Comment = require("./models/comment"),
-	User = require("./models/user"),
-	seedDB = require("./seeds")
+			app = express(),
+			bodyParser = require("body-parser"),
+			mongoose = require("mongoose"),
+			passport = require("passport"),
+			LocalStrategy = require("passport-local"),
+			staticAssets = __dirname + "/public",
+			Campground = require("./models/campground"),
+			Comment = require("./models/comment"),
+			User = require("./models/user"),
+			seedDB = require("./seeds")
+// requiring routes
+const campgroundRoutes = require("./routes/campgrounds"),
+			commentsRoutes = require("./routes/comments"),
+			indexRoutes = require("./routes/index")
 
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost/yelp_camp");
@@ -36,120 +40,10 @@ app
 		next();
 	})
 	// ROUTES
-	.get("/", function(req, res) {
-		res.render("home");
-	})
-	.get("/campgrounds", function(req, res) {
-		// Get all campgrounds from DB
-		Campground.find({}, function(err, allCampgrounds) {
-			if (err) {
-				console.log(err);
-			} else {
-				res.render("campgrounds/index", {campgrounds: allCampgrounds, currentUser: req.user});
-			}
-		})
-	})
-	.post("/campgrounds", function(req, res) {
-		// get data from form and add to campgrounds array
-		var name = req.body.name;
-		var img = req.body.image;
-		var desc = req.body.description;
-		var newCampground = {name: name, img: img, description: desc }
-		//Create a new campground and save to DB
-		Campground.create(newCampground, function(err, newlyCreated) {
-			if (err) {
-				console.log(err);
-			} else {
-				// redirect to campgrounds page
-				res.redirect("/campgrounds");				
-			}
-		})
-	})
-	.get("/campgrounds/new", function(req, res) {
-		res.render("campgrounds/new.ejs")
-	})
-	.get("/campgrounds/:id", function(req, res) {
-		// find the campgroud with the provided ID
-		Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampgound) {
-			if (err) {
-				console.log(err);
-			} else {
-				// render show template with that campground
-				console.log(foundCampgound);
-				res.render("campgrounds/show", {campground: foundCampgound});
-			}
-		})
-	})
-	// ===================
-	// COMMENTS ROUTES
-	// ===================
-	.get("/campgrounds/:id/comments/new", isLoggedIn, function(req, res) {
-		Campground.findById(req.params.id, function(err, campground) {
-			if (err) {
-				console.log(err);
-			} else {
-				res.render("comments/new", {campground: campground});
-			}
-		})
-	})
-	.post("/campgrounds/:id/comments", isLoggedIn, function(req, res) {
-		// look up campground using id
-		Campground.findById(req.params.id, function(err, campground) {
-			if (err) {
-				console.log(err);
-				res.redirect("/campground")
-			} else {
-				Comment.create(req.body.comment, function(err, comment) {
-					if (err) {
-						console.log(err);
-					} else {
-						campground.comments.push(comment);
-						campground.save();
-						res.redirect("/campgrounds/" + campground._id);
-					}
-				})
-			}
-		})
-	})
-	// AUTH ROUTES
-	//show register form
-	.get("/register", function(req, res) {
-		res.render("register");
-	})
-	.post("/register", function(req, res) {
-		var newUser = new User({username: req.body.username});
-		User.register(newUser, req.body.password, function(err, user) {
-			if (err) {
-				console.log(err);
-				return res.render("register");
-			}
-			passport.authenticate("local")(req, res, function() {
-				res.redirect("/campgrounds");
-			})
-		})
-	})
-	// show login form
-	.get("/login", function(req, res) {
-		res.render("login");
-	})
-	// handling login logic
-	.post("/login", passport.authenticate("local", {
-		successRedirect: "/campgrounds", 
-		failureRedirect: "/login"
-	}) ,function(req, res) {
-	})
-	// logout
-	.get("/logout", function(req, res) {
-		req.logout();
-		res.redirect("/campgrounds");
-	})
+	.use("/", indexRoutes)
+	.use("/campgrounds", campgroundRoutes)
+	.use("/campgrounds/:id/comments", commentsRoutes)
 	.listen(3000, function() {
 		console.log("Listening on port 3000");
 	})
 
-function isLoggedIn(req, res, next) {
-	if (req.isAuthenticated()) {
-		return next();
-	}
-	res.redirect("/login");
-} 
