@@ -11,14 +11,26 @@ footer {
   width: 100%;
   padding: 0 10px;
 }
-img {
-	max-height: 190px;
+/* Index Page*/
+img.preview {
+	max-height: 185px;
 	width: 250px;
+}
+/* Show Page*/
+.thumbnail {
+	padding: 0;
+}
+.thumbnail img {
+	width: 100%;
+}
+.thumbnail .caption-full {
+	padding: 9px;
 }
 .row.campgrounds {
 	display: flex;
 	flex-wrap: wrap;
 }
+/* New Page*/
 .row.new>h1 {
 	text-align: center;
 }
@@ -26,4 +38,5 @@ img {
 	width: 30%;
 	margin: 25px auto;
 }
+
 
