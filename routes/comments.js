@@ -27,8 +27,14 @@ router
 					if (err) {
 						console.log(err);
 					} else {
+						// add username and id to comments
+						comment.author.id = req.user._id;
+						comment.author.username = req.user.username;
+						// save comments
+						comment.save()
 						campground.comments.push(comment);
 						campground.save();
+						console.log(comment);
 						res.redirect("/campgrounds/" + campground._id);
 					}
 				})

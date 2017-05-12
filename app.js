@@ -16,7 +16,7 @@ const campgroundRoutes = require("./routes/campgrounds"),
 
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost/yelp_camp");
-seedDB();
+// seedDB(); // seed the database
 
 app
 	// PASSPORT CONFIGURATION
