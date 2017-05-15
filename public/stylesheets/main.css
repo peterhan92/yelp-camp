@@ -30,6 +30,9 @@ img.preview {
 	display: flex;
 	flex-wrap: wrap;
 }
+#delete {
+	display: inline;
+}
 /* New Page*/
 .row.new>h1 {
 	text-align: center;
