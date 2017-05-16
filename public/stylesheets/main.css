@@ -30,7 +30,7 @@ img.preview {
 	display: flex;
 	flex-wrap: wrap;
 }
-#delete {
+.delete {
 	display: inline;
 }
 /* New Page*/
