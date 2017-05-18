@@ -5,6 +5,7 @@ const express = require("express"),
 			passport = require("passport"),
 			LocalStrategy = require("passport-local"),
 			methodOverride = require("method-override"),
+			flash = require("connect-flash"),
 			staticAssets = __dirname + "/public",
 			Campground = require("./models/campground"),
 			Comment = require("./models/comment"),
@@ -14,6 +15,8 @@ const express = require("express"),
 			campgroundRoutes = require("./routes/campgrounds"),
 			commentsRoutes = require("./routes/comments"),
 			indexRoutes = require("./routes/index")
+
+app.use(flash())
 
 // PASSPORT CONFIGURATION
 mongoose.Promise = global.Promise;
@@ -38,6 +41,8 @@ app
 	.use(methodOverride("_method"))
 	.use(function(req, res, next) {
 		res.locals.currentUser = req.user;
+		res.locals.error = req.flash("error");
+		res.locals.success = req.flash("success");
 		next();
 	})
 
