@@ -42,6 +42,7 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 app
+  .set('port', (process.env.PORT || 3000))
 	.use(bodyParser.urlencoded({extended: true}))
 	.set("view engine", "ejs")
 	.use(express.static(staticAssets))
@@ -59,7 +60,7 @@ app
 	.use("/campgrounds", campgroundRoutes)
 	.use("/campgrounds/:id/comments", commentsRoutes)
 
-app.listen(3000, function() {
-		console.log("Listening on port 3000");
+app.listen(app.get("port"), function() {
+		console.log("Listening...");
 	})
 
