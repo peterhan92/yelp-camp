@@ -6,6 +6,8 @@ const express = require("express"),
 			LocalStrategy = require("passport-local"),
 			methodOverride = require("method-override"),
 			flash = require("connect-flash"),
+			session = require("express-session"),
+			MongoStore = require("connect-mongo")(session)
 			staticAssets = __dirname + "/public",
 			Campground = require("./models/campground"),
 			Comment = require("./models/comment"),
@@ -25,11 +27,12 @@ mongoose.connect(url);
 
 // seedDB(); // <==== seeding the database
 app
-	.use(require("express-session")({
+	.use(session({
 		secret: "Jennifer wins cutest person!",
 		resave: false,
 		saveUninitialized: false,
-		cookie: { maxAge: 60000 }
+		store: new MongoStore({mongooseConnection: mongoose.connection}),
+		cookie: {maxAge: 180 * 60 * 1000}
 	}))
 	.use(passport.initialize())
 	.use(passport.session())
@@ -54,7 +57,7 @@ app
 	.use("/", indexRoutes)
 	.use("/campgrounds", campgroundRoutes)
 	.use("/campgrounds/:id/comments", commentsRoutes)
-	
+
 app.listen(3000, function() {
 		console.log("Listening on port 3000");
 	})
