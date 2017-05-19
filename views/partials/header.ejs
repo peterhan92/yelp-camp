@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Yelp Camp</title>
+	<title>YelpCamp</title>
 	<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
 	<link rel="stylesheet" href="/stylesheets/main.css">
 </head>
 <body>
 
 	<nav class="navbar navbar-default">
-		<div class="container-fluid">
+		<div class="container">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="/campgrounds">YelpCamp</a>
 			</div>
@@ -25,7 +25,7 @@
 			</div>
 		</div>
 	</nav>
-	<div class="container">
+	<div class="container flash-msg">
 		<% if (error && error.length > 0) { %>
 			<div class="alert alert-danger" role="alert">
 				<%= error %>

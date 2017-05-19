@@ -20,7 +20,9 @@ app.use(flash())
 
 // PASSPORT CONFIGURATION
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/yelp_camp");
+var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
+mongoose.connect(url);
+
 // seedDB(); // <==== seeding the database
 app
 	.use(require("express-session")({

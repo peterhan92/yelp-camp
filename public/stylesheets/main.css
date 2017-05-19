@@ -42,4 +42,9 @@ img.preview {
 	margin: 25px auto;
 }
 
+.btn.btn-primary.btn-large.btn-block {
+	font-size: 1.8rem;
+  padding: 2.25%;
+}
+
 

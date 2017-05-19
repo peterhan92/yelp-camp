@@ -2,6 +2,11 @@ body {
 	background: rgb(0, 0, 0);
 }
 
+h1 {
+	font-size: 5.5rem;
+	text-shadow: 2px 2px 10px black;
+}
+
 #landing-header {
 	z-index: 1;
 	position: relative;
@@ -78,10 +83,6 @@ body {
 	30% {
 		opacity: 0;
 	}
-}
-.btn, .btn:hover{
-	background: rgba(68, 157, 68, 0.8);
-	border-color: rgba(57, 132, 57, 0.8);
 }
 
 /* Older browser support - .no-cssanimations class added by modernizr */

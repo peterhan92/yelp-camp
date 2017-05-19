@@ -36,6 +36,7 @@ router
 			} else {
 				// redirect to campgrounds page
 				console.log(newlyCreated)
+				req.flash("success", "Created Campground!")
 				res.redirect("/campgrounds");				
 			}
 		})
@@ -80,7 +81,7 @@ router
 				req.flash("error", "You don't have permission to do that")
 				res.redirect("back");
 			} else {
-				req.flash("succes", "Campground deleted");
+				req.flash("error", "Campground successfully deleted");
 				res.redirect("/campgrounds");
 			}
 		})
