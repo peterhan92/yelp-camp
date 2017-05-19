@@ -29,7 +29,7 @@ app
 		secret: "Jennifer wins cutest person!",
 		resave: false,
 		saveUninitialized: false,
-		cookie: {maxAge: 6000}
+		cookie: { maxAge: 60000 }
 	}))
 	.use(passport.initialize())
 	.use(passport.session())
