@@ -18,7 +18,15 @@ const express = require("express"),
 			commentsRoutes = require("./routes/comments"),
 			indexRoutes = require("./routes/index")
 
-app.use(flash())
+app
+	.use(flash())
+	.use(session({
+		secret: "Jennifer wins cutest person!",
+		resave: false,
+		saveUninitialized: false,
+		store: new MongoStore({mongooseConnection: mongoose.connection}),
+		cookie: {maxAge: 180 * 60 * 1000}
+	}))
 
 // PASSPORT CONFIGURATION
 mongoose.Promise = global.Promise;
@@ -27,13 +35,6 @@ mongoose.connect(url);
 
 // seedDB(); // <==== seeding the database
 app
-	.use(session({
-		secret: "Jennifer wins cutest person!",
-		resave: false,
-		saveUninitialized: false,
-		store: new MongoStore({mongooseConnection: mongoose.connection}),
-		cookie: {maxAge: 60000}
-	}))
 	.use(passport.initialize())
 	.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
