@@ -43,8 +43,10 @@ router
 				if (err) {
 					return next(err);
 				}
+				var redirectTo = req.session.redirectTo ? req.session.redirectTo: "/campgrounds";
+				delete req.session.redirectTo;
 				req.flash("success", "Welcome back, " + user.username);
-				res.redirect("/campgrounds");
+				res.redirect(redirectTo);
 			})
 		})(req, res, next);
 	})
@@ -52,7 +54,7 @@ router
 	.get("/logout", function(req, res) {
 		req.logout();
 		req.flash("success", "Successfully Logged out");
-		res.redirect("back");
+		res.redirect("/campgrounds");
 	})
 
 module.exports = router

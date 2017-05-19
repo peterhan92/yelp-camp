@@ -5,7 +5,7 @@ const express = require("express"),
 
 router
 	// INDEX
-	.get("/", function(req, res) {
+	.get("/", middleware.savePath, function(req, res) {
 		// Get all campgrounds from DB
 		Campground.find({}, function(err, allCampgrounds) {
 			if (err) {
@@ -46,7 +46,7 @@ router
 		res.render("campgrounds/new.ejs")
 	})
 	// SHOW
-	.get("/:id",function(req, res) {
+	.get("/:id", middleware.savePath,function(req, res) {
 		// find the campgroud with the provided ID
 		Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground) {
 			if (err) {

@@ -56,4 +56,9 @@ middlewareObj.isLoggedIn = function(req, res, next) {
 	res.redirect("/login");
 }
 
+middlewareObj.savePath = function(req, res, next) {
+	req.session.redirectTo = "/campgrounds" + req.path;
+	next();
+}
+
 module.exports = middlewareObj
