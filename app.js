@@ -28,7 +28,8 @@ app
 	.use(require("express-session")({
 		secret: "Jennifer wins cutest person!",
 		resave: false,
-		saveUninitialized: false
+		saveUninitialized: false,
+		cookie: {maxAge: 6000}
 	}))
 	.use(passport.initialize())
 	.use(passport.session())
