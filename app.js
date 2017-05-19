@@ -31,7 +31,8 @@ app
 		secret: "Jennifer wins cutest person!",
 		resave: false,
 		saveUninitialized: false,
-		store: new MongoStore({mongooseConnection: mongoose.connection})
+		store: new MongoStore({mongooseConnection: mongoose.connection}),
+		cookie: {maxAge: 60000}
 	}))
 	.use(passport.initialize())
 	.use(passport.session())
