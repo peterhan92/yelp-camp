@@ -12,7 +12,6 @@ const express = require("express"),
 			Campground = require("./models/campground"),
 			Comment = require("./models/comment"),
 			User = require("./models/user"),
-			seedDB = require("./seeds"),
 			// requiring routes
 			campgroundRoutes = require("./routes/campgrounds"),
 			commentsRoutes = require("./routes/comments"),
@@ -33,7 +32,6 @@ mongoose.Promise = global.Promise;
 var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
 mongoose.connect(url);
 
-// seedDB(); // <==== seeding the database
 app
 	.use(passport.initialize())
 	.use(passport.session())
@@ -42,7 +40,7 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 app
-  .set('port', (process.env.PORT || 3000))
+  .set("port", (process.env.PORT || 3000))
 	.use(bodyParser.urlencoded({extended: true}))
 	.set("view engine", "ejs")
 	.use(express.static(staticAssets))
